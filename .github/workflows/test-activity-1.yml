@@ -28,7 +28,7 @@ jobs:
     - name: Convert Notebook to Script
       run: jupyter nbconvert --to script Python_Activity_1.ipynb
     - name: Run pytest and Capture Output
-      run: pytest > pytest_output.txt 2>&1 || true
+      run: pytest > test_output.txt 2>&1 || true
     
 
     - name: Post Feedback on Commit
