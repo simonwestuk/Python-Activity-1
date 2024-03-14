@@ -22,6 +22,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Convert Notebook to Script
-      run: jupyter nbconvert --to script YourNotebook.ipynb  # Replace with your notebook name
+      run: jupyter nbconvert --to script Python_Activity_1.ipynb  # Replace with your notebook name
     - name: Run Tests
       run: python -m unittest discover -s . -p "test_*.py"  # Adjust the pattern to match your test files
