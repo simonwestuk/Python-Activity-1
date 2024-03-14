@@ -25,3 +25,27 @@ jobs:
       run: jupyter nbconvert --to script Python_Activity_1.ipynb  # Replace with your notebook name
     - name: Run Tests
       run: python -m unittest discover -s . -p "test_*.py"  # Adjust the pattern to match your test files
+
+    - name: Post Feedback on Commit
+      uses: actions/github-script@v5
+      if: always()
+      with:
+        script: |
+          const fs = require('fs');
+          const output = fs.readFileSync('pytest_output.txt', 'utf8');
+          
+          let commentBody = `## :test_tube: Test Results :test_tube:\n`;
+          commentBody += "```\n" + output + "\n```";
+          
+          // Shorten if too long for a comment
+          if (commentBody.length > 65536) {
+            commentBody = commentBody.substr(0, 65500) + "\n...output truncated...";
+          }
+          
+          github.rest.repos.createCommitComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: context.sha,
+            body: commentBody
+          });
+        github-token: ${{secrets.GITHUB_TOKEN}}
