@@ -11,6 +11,9 @@ on:
 jobs:
   accitivity_1_tests:
     runs-on: ubuntu-latest
+    permissions:   # Set specific permissions for the GITHUB_TOKEN
+      contents: read
+      pull-requests: write
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
