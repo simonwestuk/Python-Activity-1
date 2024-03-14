@@ -26,8 +26,9 @@ jobs:
         pip install -r requirements.txt
     - name: Convert Notebook to Script
       run: jupyter nbconvert --to script Python_Activity_1.ipynb  # Replace with your notebook name
-    - name: Run Tests
-      run: python -m unittest discover -s . -p "test_*.py"  # Adjust the pattern to match your test files
+    - name: Run Tests and Capture Output
+      run: python -m unittest discover -s . -p "test_*.py" > test_output.txt 2>&1 || true
+    
 
     - name: Post Feedback on Commit
       uses: actions/github-script@v5
