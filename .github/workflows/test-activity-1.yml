@@ -29,6 +29,7 @@ jobs:
       run: jupyter nbconvert --to script Python_Activity_1.ipynb
     - name: Run pytest and Capture Output
       run: pytest > pytest_output.txt 2>&1 || true
+    
 
     - name: Post Feedback on Commit
       uses: actions/github-script@v5
@@ -36,16 +37,20 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const outputFilePath = 'pytest_output.txt';  # Make sure this matches the file name in the pytest command
+          const outputFilePath = 'test_output.txt';
           let output;
           try {
             output = fs.readFileSync(outputFilePath, 'utf8');
           } catch (error) {
-            output = 'Failed to read pytest output file. Make sure the pytest commands are generating the output file correctly.';
+            output = 'Failed to read test output file. Make sure the test commands are generating the output file correctly.';
           }
           
           let commentBody = `## :test_tube: Test Results :test_tube:\n`;
-          commentBody += "```\n" + output + "\n```";
+          if (output) {
+            commentBody += "```\n" + output + "\n```";
+          } else {
+            commentBody += "No test output was captured.";
+          }
           
           // Shorten if too long for a comment
           if (commentBody.length > 65536) {
