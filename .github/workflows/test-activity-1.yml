@@ -3,32 +3,32 @@ name: Activity 1 Tests
 on:
   push:
     branches:
-      - main  # Adjust this if you use a different branch as your default
+      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  accitivity_1_tests:
+  activity_1_tests:
     runs-on: ubuntu-latest
-    permissions:   # Set specific permissions for the GITHUB_TOKEN
+    permissions:
       contents: write
-      pull-requests: write
+      issues: write
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'  # Specify the Python version you need
+        python-version: '3.8'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install pytest
         pip install -r requirements.txt
     - name: Convert Notebook to Script
-      run: jupyter nbconvert --to script Python_Activity_1.ipynb  # Replace with your notebook name
-    - name: Run Tests and Capture Output
-      run: python -m unittest discover -s . -p "test_*.py" > test_output.txt 2>&1 || true
-    
+      run: jupyter nbconvert --to script Python_Activity_1.ipynb
+    - name: Run pytest and Capture Output
+      run: pytest > pytest_output.txt 2>&1 || true
 
     - name: Post Feedback on Commit
       uses: actions/github-script@v5
@@ -36,20 +36,16 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const outputFilePath = 'test_output.txt';
+          const outputFilePath = 'pytest_output.txt';  # Make sure this matches the file name in the pytest command
           let output;
           try {
             output = fs.readFileSync(outputFilePath, 'utf8');
           } catch (error) {
-            output = 'Failed to read test output file. Make sure the test commands are generating the output file correctly.';
+            output = 'Failed to read pytest output file. Make sure the pytest commands are generating the output file correctly.';
           }
           
           let commentBody = `## :test_tube: Test Results :test_tube:\n`;
-          if (output) {
-            commentBody += "```\n" + output + "\n```";
-          } else {
-            commentBody += "No test output was captured.";
-          }
+          commentBody += "```\n" + output + "\n```";
           
           // Shorten if too long for a comment
           if (commentBody.length > 65536) {
