@@ -1,4 +1,3 @@
-# Cell 2: Testing Multiple Functions
 import unittest
 
 class TestMathFunctions(unittest.TestCase):

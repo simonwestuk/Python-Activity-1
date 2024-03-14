@@ -1,0 +1,3 @@
+unittest
+jupyter
+nbconvert
