@@ -9,11 +9,11 @@ on:
       - main
 
 jobs:
-  accitivity_1_tests:
+  activity_1_tests:
     runs-on: ubuntu-latest
     permissions:   # Set specific permissions for the GITHUB_TOKEN
       contents: write
-      pull-requests: write
+      issues: write  # Corrected permission for posting comments
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -28,7 +28,6 @@ jobs:
       run: jupyter nbconvert --to script Python_Activity_1.ipynb  # Replace with your notebook name
     - name: Run Tests and Capture Output
       run: python -m unittest discover -s . -p "test_*.py" > test_output.txt 2>&1 || true
-    
 
     - name: Post Feedback on Commit
       uses: actions/github-script@v5
@@ -36,7 +35,7 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const outputFilePath = 'unittest_output.txt';
+          const outputFilePath = 'test_output.txt';  # Corrected file name
           let output;
           try {
             output = fs.readFileSync(outputFilePath, 'utf8');
