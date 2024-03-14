@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  accitivity_1_tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
