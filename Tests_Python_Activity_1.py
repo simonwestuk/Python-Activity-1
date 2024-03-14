@@ -1,6 +1,5 @@
-
 import unittest
-
+from Python_Activity_1 import add, subtract, multiply, divide
 class TestMathFunctions(unittest.TestCase):
     def test_add(self):
         self.assertEqual(add(1, 2), 3)
