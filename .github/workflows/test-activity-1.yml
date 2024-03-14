@@ -32,10 +32,20 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const output = fs.readFileSync('pytest_output.txt', 'utf8');
+          const outputFilePath = 'unittest_output.txt';
+          let output;
+          try {
+            output = fs.readFileSync(outputFilePath, 'utf8');
+          } catch (error) {
+            output = 'Failed to read test output file. Make sure the test commands are generating the output file correctly.';
+          }
           
           let commentBody = `## :test_tube: Test Results :test_tube:\n`;
-          commentBody += "```\n" + output + "\n```";
+          if (output) {
+            commentBody += "```\n" + output + "\n```";
+          } else {
+            commentBody += "No test output was captured.";
+          }
           
           // Shorten if too long for a comment
           if (commentBody.length > 65536) {
